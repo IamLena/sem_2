@@ -33,36 +33,24 @@ def find_root(a,b,c):
     if a == 0:
         if b == 0:
             if c == 0:
-                m.delete(0, END)
-                m.insert(END, 'x может принимать любые значения')
-                m.insert(END, a)
+                m['text'] = 'x может принимать любые значения'
             else:
-                m.delete(0, END)
-                m.insert(END, 'нет корней')
+                m['text'] = 'нет корней'
         else:
             x = -c/b
-            m.delete(0, END)
-            m.insert(END, 'уравнение линейно, x = ')
-            m.insert(END, x)
+            m['text'] = 'уравнение линейно, x = '+ str(round(x,2))
 
     else:
         D = b*b - 4*a*c
         if D<0:
-            m.delete(0, END)
-            m.insert(END, 'Дискриминант меньше нуля, нет корней')
+            m['text'] = 'Дискриминант меньше нуля, нет корней'
         elif D==0:
             x = b/(2*a)
-            m.delete(0, END)
-            m.insert(END, 'совпавшие корни, х = ')
-            m.insert(END, x)
+            m['text'] = 'совпавшие корни, х = ' + str(round(x,2))
         else:
             x1 = (-b+sqrt(D))/(2*a)
             x2 = (-b-sqrt(D))/(2*a)
-            m.delete(0, END)
-            m.insert(END, 'x1 =')
-            m.insert(END, x1)
-            m.insert(END, 'x2 =')
-            m.insert(END, x2)
+            m['text'] = 'x1 = ' + str(round(x1,2)) + '  x2 = ' + str (round(x2, 2))
 
 # Прием аргументов у пользователя и их передача в функцию решения    
 def solve ():
@@ -75,7 +63,7 @@ def solve ():
         C = float(C)
         find_root(A, B, C)
     else:
-        m.insert(END, 'некорректный ввод')
+        m['text'] = 'некорректный ввод'
 
 # Очистить поле ввода
 def clear(x):
@@ -94,6 +82,7 @@ def clear_all():
     clear(a)
     clear(b)
     clear(c)
+    m["text"] = ""
     
 # виджиты
 f = ("Times New Roman",12)
@@ -104,7 +93,8 @@ b = Entry(root, text = "b", width = 5, font = f)
 lab2 = Label(root, text = "x + ", font = f)
 c = Entry(root, text = "c", width = 5, font = f)
 lab3 = Label(root, text = " = 0", font = f)
-m = Listbox (root, height = 2, width = 35, font = f, justify='center')
+lab5 = Label(root, text = 'ответ: ', font = f)
+m = Label (root, text = '', font = f)
 solveb = Button(root, bg = "black", fg = "white", text = "решить", width = 25, command = solve, font = f)
 
 # размещение в окне
@@ -115,14 +105,20 @@ b.place(x = 160,y = 50)
 lab2.place(x = 210,y = 50)
 c.place(x = 250,y = 50)
 lab3.place(x = 300,y = 50)
-m.place(x = 60, y = 105)
+lab5.place(x = 30, y = 105)
+m.place(x = 75, y = 105)
 solveb.place(x = 80, y =150)
 
 # пункт меню о авторе
 def info ():
     root2 = Tk()
     root2.title('info')
-    lab4 = Label(root2, text = "Лучина Елена \nИу7-21Б \nКалькулятор")
+    lab4 = Label(root2, text = "Лучина Елена \
+Иу7-21Б \n\nЗадание:\nСоздать калькулятор \
+c графическим интерфейсом,\nрешающий квадратное \
+уравнение. Также в\nпрограмме должно быть меню,\nвыполняющее \
+очистку полей по одному и всех\nсразу, повторяющее\
+математические\nдействия, выводящее информацию\nо программе и авторе.")
     lab4.pack()
     root2.mainloop()
 
@@ -135,9 +131,9 @@ menulist.add_command(label="info", command = info)
 menulist.add_command(label="solve", command = solve)
 clearmenu = Menu(menubar, tearoff = 0)
 menulist.add_cascade(label="clear...", menu = clearmenu)
-clearmenu.add_command(label = "a", command = clear_a())
-clearmenu.add_command(label = "b", command = clear_b())
-clearmenu.add_command(label = "c",command = clear_c())
+clearmenu.add_command(label = "a", command = clear_a)
+clearmenu.add_command(label = "b", command = clear_b)
+clearmenu.add_command(label = "c",command = clear_c)
 clearmenu.add_command(label = "all", command = clear_all)
 
 root.mainloop()
