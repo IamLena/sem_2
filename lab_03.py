@@ -6,17 +6,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def f(x):
-    return (x)**2 - 16
+    return (x - 2)**2 - 2
+    #return x ** 3 - 8
+    #return 3 * x - 3
+    #return (x)**2-16
 
 #f1 - производная f(x)
 def f1(x):
-    return 2*(x)
+    return 2 *(x-2)
+    #return 3* x **2
+    #return 3
+    #return 2*(x)
 
 a = b = 0
+R = []
 
 def graf():
-    global a
-    global b
+##    global a
+##    global b
+##    global R
     X = np.linspace(a, b)
     Y = f(X)
 
@@ -26,9 +34,10 @@ def graf():
     plt.title('f(x)')
     plt.grid()
     plt.show()
-
+    
 def clear():
     M = []
+    R = []
     A.delete(0, END)
     B.delete(0, END)
     h.delete(0, END)
@@ -123,23 +132,58 @@ def solve():
     newtons_method(a , b, step, e, N)
 
 def newtons_method(a , b, step, e, N):
+    R = []
     M = []
-    rb = b
-    while rb > a:
-        print("промежуток", rb-step, rb)
+    lb = a
+    while lb < b and lb + step <= b:
+        print("промежуток", lb, lb + step)
         n = 0
-        x0 = rb
-        if f(rb) * f(rb-step) <= 0:
-            print("M", M)
-            M.append("1")
-            number = len(M)
-            print(number)
-            interval_1.insert(END,  "({:.3f}, {:.3f})".format(rb-step, rb))
-            interval_1.insert(END, "-----------------")
-            while (n < N):
-                n += 1
-                if f1(x0) == 0:
-                    print("производная ноль")
+        x0 = lb
+        if f(lb) * f(lb + step) <= 0:
+            if f(lb) != 0:
+                M.append("1")
+                number = len(M)
+                interval_1.insert(END,  "({:.3f}, {:.3f})".format(lb, lb + step))
+                interval_1.insert(END, "-----------------")
+                while (n < N):
+                    n += 1
+                    if f1(x0) == 0:
+                        print("производная ноль")
+                        num_1.insert(END, "{:d}".format(number) )
+                        num_1.insert(END, "-----------------")
+                        root_1.insert(END, "???")
+                        root_1.insert(END, "-----------------")
+                        f_1.insert(END, "???")
+                        f_1.insert(END, "-----------------")
+                        n_1.insert(END, "{:d}".format(n))
+                        n_1.insert(END, "----------------" )
+                        error_1.insert(END, "3")
+                        error_1.insert(END, "----------------")
+
+                        break
+                    else:
+                        x1 = x0 - (f(x0) / f1(x0))
+                        print(x1)
+                        if abs(x1 - x0) < e:
+                            R.append(x1)
+                            print(R)
+                            print("Точность достигнута за {:d} итераций.".format(n))
+                            print("корень - ", x1)
+
+                            num_1.insert(END, "{:d}".format(number) )
+                            num_1.insert(END, "-----------------")
+                            root_1.insert(END, "{:.3f}".format(x1))
+                            root_1.insert(END, "-----------------")
+                            f_1.insert(END, "{:.4f}".format((f(x1))))
+                            f_1.insert(END, "-----------------")
+                            n_1.insert(END, "{:d}".format(n))
+                            n_1.insert(END, "----------------" )
+                            error_1.insert(END, "0")
+                            error_1.insert(END, "----------------")
+                            break
+                    x0 = x1
+                else:
+                    print(" не сошелся ")
                     num_1.insert(END, "{:d}".format(number) )
                     num_1.insert(END, "-----------------")
                     root_1.insert(END, "???")
@@ -148,64 +192,66 @@ def newtons_method(a , b, step, e, N):
                     f_1.insert(END, "-----------------")
                     n_1.insert(END, "{:d}".format(n))
                     n_1.insert(END, "----------------" )
-                    error_1.insert(END, "3")
+                    error_1.insert(END, "1")
                     error_1.insert(END, "----------------")
-
-                    break
-                else:
-                    x1 = x0 - (f(x0) / f1(x0))
-                    print(x1)
-                    if abs(x1 - x0) < e:
-                        print("Точность достигнута за {:d} итераций.".format(n))
-                        print("корень - ", x1)
-
-                        num_1.insert(END, "{:d}".format(number) )
-                        num_1.insert(END, "-----------------")
-                        root_1.insert(END, "{:.3f}".format(x1))
-                        root_1.insert(END, "-----------------")
-                        f_1.insert(END, "{:.4f}".format((f(x1))))
-                        f_1.insert(END, "-----------------")
-                        n_1.insert(END, "{:d}".format(n))
-                        n_1.insert(END, "----------------" )
-                        error_1.insert(END, "0")
-                        error_1.insert(END, "----------------")
-                        break
-                    x0 = x1
-            else:
-                print(" не сошелся ")
-                error_1.insert(END, "1")
         else:
             print("нет корней на этом промежутке")
-        rb -= step
-  
-# def newtons_method(a , b, step, e, N):
-#     rb = b
-#     while rb > a:
-#         print("промежуток", rb-step, rb)
-#         n = 0
-#         x0 = rb
-#         while (n < N):
-#             n += 1
-#             x1 = x0 - (f(x0) / f1(x0))
-#             print(x1)
-#             if x1 >= rb or x1 < rb-step:
-#                 print("нет корней на этом промежутке")
-#                 break
-#             if abs(x1 - x0) < e:
-#                 print("Точность достигнута за {:d} итераций.".format(n))
-#                 print("корень - ", x1)
+        lb += step
+        
+    if lb != b and ((f(lb) * f(b)) <= 0):
+        n = 0
+        x0 = lb
+        M.append("1")
+        number = len(M)
+        interval_1.insert(END,  "({:.3f}, {:.3f})".format(lb, b))
+        interval_1.insert(END, "-----------------")
+        while (n < N):
+            n += 1
+            if f1(x0) == 0:
+                print("производная ноль")
+                num_1.insert(END, "{:d}".format(number) )
+                num_1.insert(END, "-----------------")
+                root_1.insert(END, "???")
+                root_1.insert(END, "-----------------")
+                f_1.insert(END, "???")
+                f_1.insert(END, "-----------------")
+                n_1.insert(END, "{:d}".format(n))
+                n_1.insert(END, "----------------" )
+                error_1.insert(END, "2, 3")
+                error_1.insert(END, "----------------")
 
-#                 num_1.insert(END, "1")
-#                 interval_1.insert(END, "({:.3f}, {:.3f})".format(rb-step, rb))
-#                 root_1.insert(END, "{:.3f}".format(x1))
-#                 f_1.insert(END, "{:.4f}".format((f(x1))))
-#                 n_1.insert(END, "{:d}".format(n))
-#                 error_1.insert(END, "0")
-               
-#                 break
+                break
+            else:
+                x1 = x0 - (f(x0) / f1(x0))
+                print(x1)
+                if abs(x1 - x0) < e:
+                    print("Точность достигнута за {:d} итераций.".format(n))
+                    print("корень - ", x1)
 
-#             x0 = x1
-#         rb -= step
+                    num_1.insert(END, "{:d}".format(number) )
+                    num_1.insert(END, "-----------------")
+                    root_1.insert(END, "{:.3f}".format(x1))
+                    root_1.insert(END, "-----------------")
+                    f_1.insert(END, "{:.4f}".format((f(x1))))
+                    f_1.insert(END, "-----------------")
+                    n_1.insert(END, "{:d}".format(n))
+                    n_1.insert(END, "----------------" )
+                    error_1.insert(END, "2")
+                    error_1.insert(END, "----------------")
+                    break
+                x0 = x1
+        else:
+            print(" не сошелся ")
+            num_1.insert(END, "{:d}".format(number) )
+            num_1.insert(END, "-----------------")
+            root_1.insert(END, "???")
+            root_1.insert(END, "-----------------")
+            f_1.insert(END, "???")
+            f_1.insert(END, "-----------------")
+            n_1.insert(END, "{:d}".format(n))
+            n_1.insert(END, "----------------" )
+            error_1.insert(END, "2, 1")
+            error_1.insert(END, "----------------")
 
 #interface
 root = Tk()
