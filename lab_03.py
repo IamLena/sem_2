@@ -5,35 +5,45 @@ from math import *
 import matplotlib.pyplot as plt
 import numpy as np
 
+a = b = 0
+R = []
+
 def f(x):
-    return (x - 2)**2 - 2
+    return cos(x)
+    #return (x - 2)**2 - 2
     #return x ** 3 - 8
     #return 3 * x - 3
     #return (x)**2-16
 
 #f1 - производная f(x)
 def f1(x):
-    return 2 *(x-2)
+    return -sin(x)
+    #return 2 *(x-2)
     #return 3* x **2
     #return 3
     #return 2*(x)
 
-a = b = 0
-R = []
+#вторая производная
+def f2(x):
+    return -cos(x)
 
 def graf():
-##    global a
-##    global b
-##    global R
-    X = np.linspace(a, b)
-    Y = f(X)
-
-    plt.plot(X, Y)
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.title('f(x)')
-    plt.grid()
-    plt.show()
+    if A.get() != '':
+        global R
+        X = np.linspace(a, b)
+        f2 = np.vectorize(f)
+        Y = f2(X)
+        F = [f(i) for i in R]
+        imin, imax, fmin, fmax =  max_min()
+        plt.plot(X, Y)
+        plt.scatter(R, F)
+        plt.scatter(imin, fmin)
+        plt.scatter(imax, fmax)
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.title('f(x)')
+        plt.grid()
+        plt.show()
     
 def clear():
     M = []
@@ -50,8 +60,6 @@ def clear():
     f_1.delete(0, END)
     n_1.delete(0, END)
     error_1.delete(0, END)
-
-
 
 def correct(a):
     if a == '':
@@ -97,7 +105,8 @@ def solve():
         else:
             print("Некорректный ввод")
             return
-        
+
+    global e    
     e = eps.get()
     if e == '':
         print("Некорректный ввод")
@@ -117,6 +126,7 @@ def solve():
             print("Некрректный ввод")
             return
 
+    global N
     N = m.get()
     if N == '':
         print("Некорректный ввод")
@@ -132,7 +142,7 @@ def solve():
     newtons_method(a , b, step, e, N)
 
 def newtons_method(a , b, step, e, N):
-    R = []
+    global R
     M = []
     lb = a
     while lb < b and lb + step <= b:
@@ -225,6 +235,7 @@ def newtons_method(a , b, step, e, N):
                 x1 = x0 - (f(x0) / f1(x0))
                 print(x1)
                 if abs(x1 - x0) < e:
+                    R.append(x1)
                     print("Точность достигнута за {:d} итераций.".format(n))
                     print("корень - ", x1)
 
@@ -252,6 +263,79 @@ def newtons_method(a , b, step, e, N):
             n_1.insert(END, "----------------" )
             error_1.insert(END, "2, 1")
             error_1.insert(END, "----------------")
+
+def max_min():
+    global a
+    global b
+    step = 0.5
+    global e
+    global N
+
+    P = []
+    lb = a
+    while lb < b and lb + step <= b:
+        print("промежуток", lb, lb + step)
+        n = 0
+        x0 = lb
+        if f1(lb) * f1(lb + step) <= 0:
+            if f1(lb) != 0:
+                while (n < N):
+                    n += 1
+                    if f1(x0) == 0:
+                        print("производная ноль")
+                        break
+                    else:
+                        x1 = x0 - (f1(x0) / f2(x0))
+                        print(x1)
+                        if abs(x1 - x0) < e:
+                            P.append(x1)
+                            print(P)
+                            print("Точность достигнута за {:d} итераций.".format(n))
+                            print("корень - ", x1)
+                            break
+                    x0 = x1
+                else:
+                    print(" не сошелся ")
+        else:
+            print("нет корней на этом промежутке")
+        lb += step
+        
+    if lb != b and ((f1(lb) * f1(b)) <= 0):
+        n = 0
+        x0 = lb
+        while (n < N):
+            n += 1
+            if f2(x0) == 0:
+                print("производная ноль")
+                break
+            else:
+                x1 = x0 - (f1(x0) / f2(x0))
+                print(x1)
+                if abs(x1 - x0) < e:
+                    P.append(x1)
+                    print("Точность достигнута за {:d} итераций.".format(n))
+                    print("корень - ", x1)
+                    break
+                x0 = x1
+        else:
+            print(" не сошелся ")
+
+    P.append(a)
+    P.append(b)
+    print(P)
+    P2 = []
+    fmax = fmin =  f(P[0])
+    for i in P:
+        if f(i) >= fmax:
+            imax = i
+            fmax = f(i)
+        elif f(i) <= fmin:
+            imin = i
+            fmin = f(i)
+
+    print(imin, imax)
+    print(fmin, fmax)
+    return imin, imax, fmin, fmax
 
 #interface
 root = Tk()
