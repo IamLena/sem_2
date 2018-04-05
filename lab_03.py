@@ -9,7 +9,9 @@ a = b = 0
 R = []
 
 def f(x):
-    return cos(x)
+    return sin(x)
+    #return 4
+    #return cos(x)
     #return (x - 2)**2 - 2
     #return x ** 3 - 8
     #return 3 * x - 3
@@ -17,7 +19,9 @@ def f(x):
 
 #f1 - производная f(x)
 def f1(x):
-    return -sin(x)
+    return cos(x)
+    #return 0
+    #return -sin(x)
     #return 2 *(x-2)
     #return 3* x **2
     #return 3
@@ -25,20 +29,24 @@ def f1(x):
 
 #вторая производная
 def f2(x):
-    return -cos(x)
+    return -sin(x)
 
 def graf():
     if A.get() != '':
         global R
+        print(R)
         X = np.linspace(a, b)
         f2 = np.vectorize(f)
         Y = f2(X)
         F = [f(i) for i in R]
-        imin, imax, fmin, fmax =  max_min()
         plt.plot(X, Y)
         plt.scatter(R, F)
-        plt.scatter(imin, fmin)
-        plt.scatter(imax, fmax)
+        if max_min() != None:
+            Imin, Imax, fmin, fmax =  max_min()
+            Fmin = [fmin] * len(Imin)
+            Fmax = [fmax] * len(Imax)
+            plt.scatter(Imin, Fmin)
+            plt.scatter(Imax, Fmax)
         plt.xlabel('x')
         plt.ylabel('y')
         plt.title('f(x)')
@@ -325,21 +333,36 @@ def max_min():
     print(P)
     P2 = []
     fmax = fmin =  f(P[0])
+    imin = imax = P[0]
+    Imax = []
+    Imin = []
     for i in P:
         if f(i) >= fmax:
-            imax = i
+            if f(i) == f(imax):
+                Imax.append(i)
+            else:
+                Imax = [i]
+                imax = i
             fmax = f(i)
-        elif f(i) <= fmin:
-            imin = i
+            print(imax, fmax)
+        if f(i) <= fmin:
+            if f(i) == f(imin):
+                Imin.append(i)
+            else:
+                Imin = [i]
+                imin = i
             fmin = f(i)
+            print(imin, fmin)
 
-    print(imin, imax)
-    print(fmin, fmax)
-    return imin, imax, fmin, fmax
+    print(Imin, Imax, fmin, fmax)
+    if fmin == fmax:
+        return
+    else:
+        return Imin, Imax, fmin, fmax
 
 #interface
 root = Tk()
-root.minsize(600, 330)
+root.minsize(600, 375)
 
 #vidgets
 lab_1 = Label (root, text = "Нахождение приближенных корней функции", font = 12)
@@ -359,7 +382,7 @@ solvebut = Button(root, width = 20, text = "решить", command = solve, bg =
 clearbut = Button(root, width = 20, text = "очистить", command = clear, bg = "lightblue")
 
 #table
-frame2 = Frame(root, width = 580, height = 140, bg = "lightgrey")
+frame2 = Frame(root, width = 580, height = 190, bg = "lightgrey")
 
 lab_7 = Label(root, text = '№', width = 8, bg = "lightgrey")
 lab_8 = Label(root, text = "интервал", width = 8, bg = "lightgrey")
@@ -368,12 +391,12 @@ lab_10 = Label(root, text = "f(x)", width = 8, bg = "lightgrey")
 lab_11 = Label(root, text = "n", width = 8, bg = "lightgrey")
 lab_12 = Label(root, text = "ошибка", width = 8, bg = "lightgrey")
 
-num_1 = Listbox(root, width = 14, height = 6)
-interval_1 = Listbox(root, width = 14, height = 6)
-root_1 = Listbox(root, width = 14, height = 6)
-f_1 = Listbox(root, width = 14, height = 6)
-n_1 = Listbox(root, width = 14, height = 6)
-error_1 = Listbox(root, width = 14, height = 6)
+num_1 = Listbox(root, width = 14, height = 9)
+interval_1 = Listbox(root, width = 14, height = 9)
+root_1 = Listbox(root, width = 14, height = 9)
+f_1 = Listbox(root, width = 14, height = 9)
+n_1 = Listbox(root, width = 14, height = 9)
+error_1 = Listbox(root, width = 14, height = 9)
 
 frame = Frame(root, width = 250, height = 83, bg = "lightgreen")
 lab_0 = Label(root, text = "код ошибки\n0 - ошибки нет\n1 - точность не достигнута за n итераций\n2 - шаг вышел за заданный отрезок\n3 - производная равна нулю", justify = LEFT, bg = "lightgreen")
