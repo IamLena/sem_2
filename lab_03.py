@@ -9,27 +9,28 @@ a = b = 0
 R = []
 
 def f(x):
-    return sin(x)
+    #return sin(x)
     #return 4
     #return cos(x)
     #return (x - 2)**2 - 2
-    #return x ** 3 - 8
+    return x ** 3 - 15
     #return 3 * x - 3
     #return (x)**2-16
 
 #f1 - производная f(x)
 def f1(x):
-    return cos(x)
+    #return cos(x)
     #return 0
     #return -sin(x)
     #return 2 *(x-2)
-    #return 3* x **2
+    return 3* x **2
     #return 3
     #return 2*(x)
 
 #вторая производная
 def f2(x):
-    return -sin(x)
+    return 6*x
+    # return -sin(x)
 
 def graf():
     if A.get() != '':
@@ -54,8 +55,10 @@ def graf():
         plt.show()
     
 def clear():
+    global R
     M = []
     R = []
+    p = []
     A.delete(0, END)
     B.delete(0, END)
     h.delete(0, END)
