@@ -215,7 +215,7 @@ def newtons_method(a , b, step, e, N):
                     f_1.insert(END, "-----------------")
                     n_1.insert(END, "{:d}".format(n))
                     n_1.insert(END, "----------------" )
-                    error_1.insert(END, "3")
+                    error_1.insert(END, "1")
                     error_1.insert(END, "----------------")
                     break
                     
