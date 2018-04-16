@@ -6,8 +6,8 @@ from math import *
 import matplotlib.pyplot as plt
 import numpy as np
 
-a = b = 0
 R = []
+a = 'no graf'
 
 def f(x):
     return sin(x)
@@ -28,6 +28,11 @@ def graf():
     e = 0.1
     N = 10
     step = 0.5
+
+    print("a is ", a)
+    if a == "no graf":
+        error_message.config(text =  "Нет данных")
+        return
 
     global R
     R = []
@@ -82,7 +87,8 @@ def graf():
 def clear():
     error_message.config(text =  "")
     global R
-    M = []
+    global number
+    number = 0
     R = []
     p = []
     A.delete(0, END)
@@ -183,8 +189,9 @@ def solve():
     newtons_method(a , b, step, e, N)
 
 def newtons_method(a , b, step, e, N):
-    M = []
     lb = a
+    global number
+    number = 0
     while lb < b:
         if b - lb <= step:
             rb = b   
@@ -192,29 +199,29 @@ def newtons_method(a , b, step, e, N):
             rb = lb + step
         n = 0
         x0 = lb
-        if f(lb) * f(rb) <= 0:
-            if f(lb) != 0:
-                M.append("1")
-                number = len(M)
-                interval_1.insert(END,  "({:.3f}, {:.3f})".format(lb, rb))
-                interval_1.insert(END, "-----------------")
-                while (n < N):
-                    n += 1
-                    if f1(x0) == 0:
-                        num_1.insert(END, "{:d}".format(number) )
-                        num_1.insert(END, "-----------------")
-                        root_1.insert(END, "???")
-                        root_1.insert(END, "-----------------")
-                        f_1.insert(END, "???")
-                        f_1.insert(END, "-----------------")
-                        n_1.insert(END, "{:d}".format(n))
-                        n_1.insert(END, "----------------" )
-                        error_1.insert(END, "3")
-                        error_1.insert(END, "----------------")
+        if f(lb) * f(rb) < 0:
+            number += 1
+            interval_1.insert(END,  "({:.3f}, {:.3f})".format(lb, rb))
+            interval_1.insert(END, "-----------------")
 
-                        break
-
+            while (n < N):
+                n += 1
+                if f1(x0) == 0:
+                    num_1.insert(END, "{:d}".format(number) )
+                    num_1.insert(END, "-----------------")
+                    root_1.insert(END, "???")
+                    root_1.insert(END, "-----------------")
+                    f_1.insert(END, "???")
+                    f_1.insert(END, "-----------------")
+                    n_1.insert(END, "{:d}".format(n))
+                    n_1.insert(END, "----------------" )
+                    error_1.insert(END, "3")
+                    error_1.insert(END, "----------------")
+                    break
+                    
+                else:
                     x1 = x0 - (f(x0) / f1(x0))
+
                     if not (lb < x1 < rb):
                         num_1.insert(END, "{:d}".format(number) )
                         num_1.insert(END, "-----------------")
@@ -226,40 +233,58 @@ def newtons_method(a , b, step, e, N):
                         n_1.insert(END, "----------------" )
                         error_1.insert(END, "2")
                         error_1.insert(END, "----------------")
-
                         break
 
-                    if abs(x1 - x0) < e:
-                        num_1.insert(END, "{:d}".format(number) )
-                        num_1.insert(END, "-----------------")
-                        root_1.insert(END, "{:.5f}".format(x1))
-                        root_1.insert(END, "-----------------")
-                        f_1.insert(END, "{:.5f}".format((f(x1))))
-                        f_1.insert(END, "-----------------")
-                        n_1.insert(END, "{:d}".format(n))
-                        n_1.insert(END, "----------------" )
-                        error_1.insert(END, "0")
-                        error_1.insert(END, "----------------")
-                        break
-
-                    x0 = x1
-                else:
+                if abs(x1 - x0) < e:
                     num_1.insert(END, "{:d}".format(number) )
                     num_1.insert(END, "-----------------")
-                    root_1.insert(END, "???")
+                    root_1.insert(END, "{:.5f}".format(x1))
                     root_1.insert(END, "-----------------")
-                    f_1.insert(END, "???")
+                    f_1.insert(END, "{:.5f}".format((f(x1))))
                     f_1.insert(END, "-----------------")
                     n_1.insert(END, "{:d}".format(n))
                     n_1.insert(END, "----------------" )
-                    error_1.insert(END, "1")
+                    error_1.insert(END, "0")
                     error_1.insert(END, "----------------")
+                    break
+
+                x0 = x1
+
+            else:
+                num_1.insert(END, "{:d}".format(number) )
+                num_1.insert(END, "-----------------")
+                root_1.insert(END, "???")
+                root_1.insert(END, "-----------------")
+                f_1.insert(END, "???")
+                f_1.insert(END, "-----------------")
+                n_1.insert(END, "{:d}".format(n))
+                n_1.insert(END, "----------------" )
+                error_1.insert(END, "1")
+                error_1.insert(END, "----------------")
+                break
+
+
+        if f(x0) == 0:
+            n += 1
+            number += 1
+            interval_1.insert(END,  "({:.3f}, {:.3f})".format(lb, rb))
+            interval_1.insert(END, "-----------------")
+            num_1.insert(END, "{:d}".format(number) )
+            num_1.insert(END, "-----------------")
+            root_1.insert(END, "{:.5f}".format(x0))
+            root_1.insert(END, "-----------------")
+            f_1.insert(END, "{:.5f}".format((f(x0))))
+            f_1.insert(END, "-----------------")
+            n_1.insert(END, "{:d}".format(n))
+            n_1.insert(END, "----------------" )
+            error_1.insert(END, "0")
+            error_1.insert(END, "----------------")
+            
+
         lb += step
 
-    if len(M) == 0:
+    if number == 0:
         error_message.config(text =  "Нет корней.")
-    
-        
 
 def max_min():
 
@@ -271,23 +296,24 @@ def max_min():
 
     P = []
     lb = a
-    
+
     while lb < b:
         if b - lb <= step:
             rb = b   
         else:
             rb = lb + step
-            
         n = 0
         x0 = lb
         if f1(lb) * f1(rb) <= 0:
             if f2(lb) != 0:
                 while (n < N):
-                    n += 1
                     if f1(x0) == 0:
+                        R.append(x0)
                         break
-
+                    
+                    n += 1
                     x1 = x0 - (f1(x0) / f2(x0))
+                    
                     if not (lb < x1 < rb):
                         break
 
@@ -295,9 +321,9 @@ def max_min():
                         P.append(x1)
                         break
 
-                    x0 = x1
+                    x0 = x1           
         lb += step
-
+        
     P.append(a)
     P.append(b)
     print(P)
