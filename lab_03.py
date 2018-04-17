@@ -10,15 +10,15 @@ R = []
 a = 'no graf'
 
 def f(x):
-    return sin(x)
+    return cos(x)
 
 #f1 - производная f(x)
 def f1(x):
-    return cos(x)
+    return -sin(x)
 
 #вторая производная
 def f2(x):
-    return -sin(x)
+    return -cos(x)
 
 # построение графика
 def graf():
@@ -29,7 +29,6 @@ def graf():
     N = 10
     step = 0.5
 
-    print("a is ", a)
     if a == "no graf":
         error_message.config(text =  "Нет данных")
         return
@@ -240,7 +239,7 @@ def newtons_method(a , b, step, e, N):
                     num_1.insert(END, "-----------------")
                     root_1.insert(END, "{:.5f}".format(x1))
                     root_1.insert(END, "-----------------")
-                    f_1.insert(END, "{:.5f}".format((f(x1))))
+                    f_1.insert(END, "{:e}".format((f(x1))))
                     f_1.insert(END, "-----------------")
                     n_1.insert(END, "{:d}".format(n))
                     n_1.insert(END, "----------------" )
@@ -273,7 +272,7 @@ def newtons_method(a , b, step, e, N):
             num_1.insert(END, "-----------------")
             root_1.insert(END, "{:.5f}".format(x0))
             root_1.insert(END, "-----------------")
-            f_1.insert(END, "{:.5f}".format((f(x0))))
+            f_1.insert(END, "{:e}".format((f(x0))))
             f_1.insert(END, "-----------------")
             n_1.insert(END, "{:d}".format(n))
             n_1.insert(END, "----------------" )
@@ -326,7 +325,6 @@ def max_min():
         
     P.append(a)
     P.append(b)
-    print(P)
     P2 = []
     fmax = fmin =  f(P[0])
     imin = imax = P[0]
@@ -340,7 +338,6 @@ def max_min():
                 Imax = [i]
                 imax = i
             fmax = f(i)
-            print(imax, fmax)
         if f(i) <= fmin:
             if f(i) == f(imin):
                 Imin.append(i)
@@ -348,9 +345,7 @@ def max_min():
                 Imin = [i]
                 imin = i
             fmin = f(i)
-            print(imin, fmin)
 
-    print(Imin, Imax, fmin, fmax)
     if fmin == fmax:
         return
     else:
