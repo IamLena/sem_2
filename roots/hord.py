@@ -13,20 +13,23 @@ print("-----------------------------")
 #вершины и концы отрезков
 
 def f(x):
-    return x * x - 2
-
+    return x * x - 3
 def find_root(a, b, eps):
-    while abs(a - b) > 2*eps:
-        if f(a) == 0:
-            x = a
-        elif f(b) == 0:
-            x = b
-        else:
-            x = (a + b) / 2
-            if f(x) * f(a) <= 0:
-                b = x
+    if f(a) == 0:
+        x = a
+    elif f(b) == 0:
+        x = b
+    else:
+        lb = a
+        rb = b
+        x = x = lb - (rb - lb)*f(lb)/(f(rb) - f(lb))
+
+        while (abs(lb - x) > eps and abs(rb - x) > eps):
+            x = lb - (rb - lb)*f(lb)/(f(rb) - f(lb))
+            if f(x) * f(lb) <= 0:
+                rb = x
             else:
-                a = x
+                lb = x
     return x
 
 def solve(a, b, eps, step):
@@ -41,6 +44,9 @@ def solve(a, b, eps, step):
         find_root (a, b, eps)
 
 solve(a, b, eps, step)
+
+def zero(x):
+    return 0
 
 X = np.linspace(a, b)
 Y = f(X)
