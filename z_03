@@ -1,0 +1,62 @@
+#zashita
+#метод половинного деления
+from math import *
+
+print("метод половинного деления")
+
+a = float(input("a: "))
+b = float(input("b: "))
+eps = float(input("eps: "))
+step = float(input("step: "))
+N = int(input("n: "))
+n = 0
+R = []
+
+print("-----------------------------")
+
+def f(x):
+    return sin(x)
+
+def find_root(a, b, eps):
+    global n
+    n = 0
+    while abs(a - b) > 2*eps:
+        if n >= N:
+            print("({:.2f}".format(a),";{:.2f}".format(a+step),")\t", end = '')
+            print("точность не достугнутa")
+            x = "no"
+            break
+        n += 1
+        if f(a) == 0:
+            x = a
+            break
+        elif f(b) == 0:
+            x = b
+            break
+        else:
+            x = (a + b) / 2
+            if f(x) * f(a) <= 0:
+                b = x
+            else:
+                a = x
+    return x
+
+def solve(a, b, eps, step):
+    global n
+    print("интервал \t корень \t значение функции \t количество итераций")
+    print()
+    while (a < b):
+        if f(a) * f(a + step) <= 0:
+            x = find_root (a, a + step, eps)
+            if x != "no":
+                if not(x in R):
+                    R.append(x)
+                    print("({:.2f}".format(a),";{:.2f}".format(a+step),")\t", end = '')
+                    print("{:8.4f}".format(x),"\t", end = '')
+                    print("{:8.1e}".format(f(x)), "\t", end = '')
+                    print("{:16d}".format(n))
+        a += step
+    if a > b: 
+        find_root (a - step, b, eps)
+
+solve(a, b, eps, step)
