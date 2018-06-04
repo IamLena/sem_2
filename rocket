@@ -1,0 +1,54 @@
+from math import sin
+import pygame
+
+black = (0,0,0)
+white = (255,255,255)
+red = (255, 0, 0)
+blue = (150,150,255)
+yellow = (255, 255,0)
+
+window = pygame.display.set_mode([1000, 500])
+screen = pygame.Surface([1000, 500])
+
+#rocket
+x = 100
+y = 250
+k = 40
+a = 0
+
+def draw_rocket():
+    pygame.draw.rect(screen, red, (x, y, 150, 80), 0)
+    #pygame.draw.polygon(screen, red, ((250, 250), ((100, y_nose + 80) /2), (x_nose, Y_nose+80)), 0)
+    pygame.draw.polygon(screen, red, ((x_nose, y_nose), (x_nose + 50, y_nose + 40), (x_nose, y_nose+80)), 0)
+    pygame.draw.circle(screen, white, (x + 75, y + 40), 35, 0)
+    pygame.draw.circle(screen, black, (x + 75, y + 40), 36, 1)
+    pygame.draw.line(screen, black, (x + 75 - 36, y + 40), (x + 75 + 36, y + 40), 1)
+    pygame.draw.line(screen, black, (x + 75, y + 40 + 36), (x + 75, y + 40 - 36), 1)
+    pygame.draw.line(screen, black, (x_nose, y_nose), (x_nose, y_nose + 80), 1)
+    pygame.draw.polygon(screen, red, ((x, y), (x, y+80), (x-30, y + 80 + 20), (x-30, y - 20)), 0)
+    pygame.draw.polygon(screen, yellow, ((x - 30 - 30, y - 20), (x - 30, y - 20), (x - 30, y + 80 + 20),\
+                                         (x - 30 - 30, y + 80 + 20), (x - 30 - 15, y + 80 + 20 - 30), (x - 30 -30 , y + 80 + 20 - 30 - 30),\
+                                         (x - 30 - 15, y + 80 + 20 - 30 - 30 -30), (x - 30 - 30, y - 20)), 0)
+
+playing = True
+while playing:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            playing = False
+
+    x += 45
+    a += 1
+    if x > 1100:
+        x = 0
+    y = 250 + int(k * sin (a))
+        
+    screen.fill(blue)
+
+    x_nose = x + 150
+    y_nose = y
+    draw_rocket()
+    window.blit(screen, (0, 0))
+    pygame.display.flip()
+    pygame.time.delay(130)
+
+pygame.quit()
